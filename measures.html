@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Vannstander</title>
+    <title>M&aring;linger</title>
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css"
           rel="stylesheet">
     <script type="text/javascript"
@@ -9,30 +9,34 @@
 </head>
 <body>
 <div class="container">
-    <h1>Vannstander</h1>
+    <h3>{{ river.name }}</h3>
+    <a href="/">
+        Tilbake
+    </a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    {% if int(start) >= 99 %}
+    <a
+            href="/measures?river_id={{ river.id }}&start={{ int(start) - 100 }}&rows={{ rows }}">
+       <<
+    </a>
+    {% end %}
+    <a
+            href="/measures?river_id={{ river.id }}&start={{ int(start) + 100 }}&rows={{ rows }}">
+        >>
+    </a>
     <div class="row">
-        <div class="span12">
+        <div>
             <table class="table table-striped table-bordered table-condensed">
             <tr>
-               <th>Elv</th>
-               <th>Oppdatert</th>
+               <th>Dato</th>
                <th>Niv&aring;</th>
                <th>M3</th>
             </tr>
-            {% for river in rivers %}
+            {% for ms in measures %}
                <tr>
-                   <td>
-                       <a href="/measures?river_id={{ river.id}}&start={{ start }}&rows={{ rows}}">
-                           {{ river.name}}
-                       </a>
-                   </td>
-                   <td>
-                       <a href="/measures?river_id={{ river.id}}&start={{ start }}&rows={{ rows}}">
-                           {{ river.latest_measure_at}}
-                       </a>
-                   </td>
-                   <td>{{ river.latest_level or '-' }}</td>
-                   <td>{{ river.latest_cumecs or '-' }}</td>
+                   <td>{{ ms.measured_at or '-' }}</td>
+                   <td>{{ ms.level }}</td>
+                   <td>{{ ms.cumecs or '-' }}</td>
                 </tr>
             {% end %}
             </table>

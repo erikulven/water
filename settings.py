@@ -115,12 +115,15 @@ def default_locale():
 def db_connection():
     res = "sqlite:///:memory:"
     if os.getenv('APP_CONTEXT_TEST') is None:
-        host = read_config('HOST', 'postgresql')
-        port = read_config('PORT', 'postgresql')
-        name = read_config('DBNAME', 'postgresql')
-        user = read_config('USER', 'postgresql')
-        pwd = read_config('PASSWORD', 'postgresql')
-        res = "postgresql://%s:%s@%s:%s/%s" % (user, pwd, host, port, name)
+        if read_config('CONNECTION', 'sqlite') is not None:
+            res = read_config('CONNECTION', 'sqlite')
+        else:
+            host = read_config('HOST', 'postgresql')
+            port = read_config('PORT', 'postgresql')
+            name = read_config('DBNAME', 'postgresql')
+            user = read_config('USER', 'postgresql')
+            pwd = read_config('PASSWORD', 'postgresql')
+            res = "postgresql://%s:%s@%s:%s/%s" % (user, pwd, host, port, name)
     else:
         logger.info("DB CONNECTION: %s" % res)
     return res

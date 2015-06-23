@@ -37,6 +37,23 @@ class RiverService(ServiceTemplate):
         return None
 
     @time_logger
+    def find_measures(self, river_id, start=0, rows=100, db_model=False):
+        measures = []
+        try:
+            q = self.sess.query(Measure)
+            q = q.filter(Measure.river_id == river_id)
+            db_ms = q.order_by(Measure.measured_at.desc()).offset(start).limit(
+                rows)
+            if db_model:
+                return db_ms
+            elif db_ms:
+                for s in db_ms:
+                    measures.append(s.to_artifact())
+        except NoResultFound:
+            return None
+        return measures
+
+    @time_logger
     def find_rivers(self, start=0, rows=1000, db_model=False):
         """Find and return a list of rivers"""
         rivers = []
@@ -47,7 +64,8 @@ class RiverService(ServiceTemplate):
                 return db_rivers
             elif db_rivers:
                 for s in db_rivers:
-                    rivers.append(s.to_artifact())
+                    if s.source == 'NVE':
+                        rivers.append(s.to_artifact())
         except NoResultFound:
             return None
         return rivers
@@ -191,4 +209,3 @@ if __name__ == '__main__':
         rs = RiverService(_db_sess=sess)
         for river in rs.find_rivers(db_model=True):
             rs.sync_river(river)
-            sess.commit()

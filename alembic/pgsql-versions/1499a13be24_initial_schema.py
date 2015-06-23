@@ -22,12 +22,6 @@ def upgrade():
                     sa.Column('source', sa.String(length=255), nullable=False),
                     sa.Column('name', sa.String(length=255), nullable=False),
                     sa.Column('description', sa.Text(), nullable=True),
-                    sa.Column('latest_measure_at', sa.DateTime(),
-                              nullable=True),
-                    sa.Column('latest_level', sa.String(length=20),
-                              nullable=True),
-                    sa.Column('latest_cumecs', sa.Float(),
-                              nullable=True),
                     sa.Column('created_at', sa.DateTime(), nullable=False),
                     sa.Column('updated_at', sa.DateTime(), nullable=False),
                     sa.PrimaryKeyConstraint('id'),
@@ -38,7 +32,7 @@ def upgrade():
                     sa.Column('id', sa.Integer(), nullable=False),
                     sa.Column('measured_at', sa.DateTime(), nullable=False),
                     sa.Column('level', sa.String(length=20), nullable=False),
-                    sa.Column('cumecs', sa.Float(), nullable=False),
+                    sa.Column('cumecs', sa.Integer(), nullable=False),
                     sa.Column('river_id', sa.Integer(), nullable=False),
                     sa.Column('created_at', sa.DateTime(), nullable=False),
                     sa.Column('updated_at', sa.DateTime(), nullable=True),
@@ -47,9 +41,6 @@ def upgrade():
                     sa.PrimaryKeyConstraint('id')
                     )
     op.create_index(op.f('ix_measures_river_id'), 'measures', ['river_id'],
-                    unique=False)
-    op.create_index(op.f('ix_measure_measured_at'), 'measures',
-                    ['river_id', 'measured_at'],
                     unique=False)
 
 

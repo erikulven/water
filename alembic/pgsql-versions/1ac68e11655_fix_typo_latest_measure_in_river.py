@@ -20,5 +20,6 @@ def upgrade():
 
 
 def downgrade():
-    op.add_column('rivers', sa.Column('latest_mesasure_at', postgresql.TIMESTAMP(), autoincrement=False, nullable=True))
+    op.add_column('rivers', sa.Column('latest_mesasure_at', sa.DateTime(),
+                                      autoincrement=False, nullable=True))
     op.drop_column('rivers', 'latest_measure_at')

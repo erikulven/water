@@ -65,16 +65,17 @@ def run_migrations_online():
     #     poolclass=pool.NullPool
     # )
 
-    _user = settings.read_config('USER', 'postgresql')
-    _pass = settings.read_config('PASSWORD', 'postgresql')
-    _host = settings.read_config('HOST', 'postgresql')
-    _port = settings.read_config('PORT', 'postgresql')
-    _dbname = settings.read_config('DBNAME', 'postgresql')
-
-    engine = create_engine(
-        'postgresql://{0}:{1}@{2}:{3}/{4}'.format(_user, _pass, _host,
-                                                  _port, _dbname)
-    )
+    #_user = settings.read_config('USER', 'postgresql')
+    #_pass = settings.read_config('PASSWORD', 'postgresql')
+    #_host = settings.read_config('HOST', 'postgresql')
+    #_port = settings.read_config('PORT', 'postgresql')
+    #_dbname = settings.read_config('DBNAME', 'postgresql')
+    #
+    #engine = create_engine(
+    #    'postgresql://{0}:{1}@{2}:{3}/{4}'.format(_user, _pass, _host,
+    #                                              _port, _dbname)
+    #)
+    engine = create_engine(settings.db_connection())
 
     connection = engine.connect()
     context.configure(
