@@ -22,8 +22,11 @@ class MeasureHandler(web.RequestHandler):
             river_id = self.get_query_argument('river_id')
             river = rs.get_river(river_id=river_id)
             measures = rs.find_measures(river_id, start=start, rows=rows)
+            from_date = measures[0].measured_at
+            until_date = measures[len(measures)-1].measured_at
             self.render("measures.html", river=river, measures=measures,
-                        start=start, rows=rows)
+                        start=start, rows=rows, from_date=from_date,
+                        until_date=until_date)
 
 
 app = web.Application([
