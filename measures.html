@@ -7,7 +7,7 @@
     <script type="text/javascript"
             src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script type="text/javascript"
-          src="https://www.google.com/jsapi?autoload={
+            src="https://www.google.com/jsapi?autoload={
             'modules':[{
               'name':'visualization',
               'version':'1',
@@ -34,43 +34,55 @@
         var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
         chart.draw(data, options);
       }
+
+
+
+
     </script>
 
 </head>
 <body>
 <div class="container">
     <h3>{{ river.name }}</h3>
-    <a href="/">
-        Tilbake
-    </a>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    {% if int(start) >= 99 %}
-    <a
-            href="/measures?river_id={{ river.id }}&start={{ int(start) - 100 }}&rows={{ rows }}">
-       <<
-    </a>
-    {% end %}
-    <a
-            href="/measures?river_id={{ river.id }}&start={{ int(start) + 100 }}&rows={{ rows }}">
-        >>
-    </a>
-    <div id="curve_chart" style="width: 100%; height: 200px"></div>
+
+    <div class="row">
+        <div class="pagination">
+            <ul>
+                <li>
+                    <a href="/">Tilbake</a>
+                </li>
+                <li {% if int(start) < 99 %}class="disabled"{% end %}>
+                <a href="/measures?river_id={{ river.id }}&start={{ int(start) - 100 }}&rows={{ rows }}">&laquo;</a>
+                </li>
+                <li>
+                    <a href="/measures?river_id={{ river.id }}&start={{ int(start) + 100 }}&rows={{ rows }}">&raquo;</a>
+                </li>
+           </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="curve_chart"
+             style="height: 300px"></div>
+    </div>
+
     <div class="row">
         <div>
             <table class="table table-striped table-bordered table-condensed">
-            <tr>
-               <th>Dato</th>
-               <th>Niv&aring;</th>
-               <th>M3</th>
-            </tr>
-            {% for ms in measures %}
-               <tr>
-                   <td>{{ ms.measured_at.strftime('%Y-%m-%d %H:%M') or '-'
-                       }}</td>
-                   <td>{{ ms.level }}</td>
-                   <td>{{ ms.cumecs or '-' }}</td>
+                <tr>
+                    <th>Dato</th>
+                    <th>Niv&aring;</th>
+                    <th>M3</th>
                 </tr>
-            {% end %}
+                {% for ms in measures %}
+                <tr>
+                    <td>{{ ms.measured_at.strftime('%Y-%m-%d %H:%M') or '-'
+                        }}
+                    </td>
+                    <td>{{ ms.level }}</td>
+                    <td>{{ ms.cumecs or '-' }}</td>
+                </tr>
+                {% end %}
             </table>
         </div>
     </div>
@@ -82,6 +94,10 @@
             results = regex.exec(location.search);
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
+
+
+
+
 
     </script>
 </body>
